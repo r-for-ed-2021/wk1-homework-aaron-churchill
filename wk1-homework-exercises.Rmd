@@ -1,0 +1,118 @@
+---
+title: "Week 1 Home Exercises"
+output: html_notebook
+---
+
+Deadline: Wednesday, June 10 at 11:59pm eastern
+
+
+In questions 1-5, correct the code chunks, looking for common errors.  The code chunks build upon one another, so make sure you've corrected and run the chunk before moving on to the next one  Hint: If you can't find an error, look at Lesson 1 to find an example of correctly written code.  The most common errors in programming are typos and simple errors.  They can be surprisingly hard to spot!
+
+In questions 6-10, answer the questions by using your new skills to subset and explore data frames.
+
+Work directly in this notebook in R Studio, and email the corrected notebook to Sara by Wednesday, June 10 at 11:59pm eastern.
+
+You can run the code chunks, in gray by clicking the green RUN CURRENT CHUNK arrow in the upper-right of the code chunk.  Alternately, you can select some or all of the lines with your cursor, and press cmd-return (mac) or ctrl-return (windows).
+
+### Part 1. Why does this code not work?
+Run the code chunk.  If there is an error, correct it.
+
+1. 
+```{r}
+# calculate four plus seven
+calculation1 <- 4 + 7
+
+calculation1
+```
+
+
+2. 
+```{r}
+# calculate five plus seven
+
+five <- "5"
+seven <- "7"
+calculation2 <- 5+7
+
+calculation2
+```
+
+3. 
+```{r}
+library(tidyverse)
+
+### Import dataset of desegregation orders from 1957 to 2014 from the ProPublica - find it in data folder
+# (source - https://www.propublica.org/datastore/dataset/school-desegregation-orders-data)
+all_deseg_pp <- read_csv("data/invol_data_propublica.csv")
+
+## View the first six rows of the data frame
+head(all_deseg_pp)
+
+```
+
+
+4. 
+```{r}
+# create a data frame of open desegregation orders from the dataset imported in question 3
+open_deseg_pp <- subset(all_deseg_pp, Year.Lifted == "STILL OPEN")
+
+View(open_deseg_pp)
+```
+
+5.
+```{r}
+# calculate how long the the desegregation orders have been in effect, for all open desegregation orders
+### Note: we are using 2014 in the equation below because this dataset was created in 2014.  Some of these orders may have closed since then.
+
+open_deseg_pp$duration <- 2014 - as.numeric(open_deseg_pp$Year.Placed)  ## Note, expect a red message about NAs for the correct answer - it is a message, not an error
+```
+
+### Part 2. Use your two data frames from questions 3-5 to answer questions 6 - 10. 
+
+There are many ways to answer each question.  Use the methods from Lesson 1 to answer these questions.  Show your work in the gray box, with comments to explain what you are doing.
+
+6. How many of the desegregation orders were still open in 2014?
+```{r}
+# write your code here to answer question 6
+# Calculating the number of districts with open deseg orders
+open_deseg_districts <- nrow(open_deseg_pp)
+# There are 330 districts with open deseg orders
+```
+
+7. What desegregation order that was still open in 2014 had been open longest?
+```{r}
+# write the code here to answer question 7 - you can be very simple! 
+View(open_deseg_pp)
+# Washington DC has been under deseg orders the longest (60 yrs as of 2014)
+```
+
+
+8. Is that desegregation order still open?
+```{r}
+# write the code here to answer question 8.  There is another dataset in the data folder that will help you answer this question, a dataset of school districts under a desegregation order according to the Civil Rights Data Collection from 2017-18
+View(invol_data_propublica)
+# Yes, deseg order is still open
+
+```
+
+9. How many open desegregation orders are there in Alabama, according to the ProPublica dataset and the CRDC dataset
+```{r}
+# write the code here to answer question 9
+AlabamaDeseg <- subset(invol_data_propublica, State == "AL")
+AlabamaDeseg <- nrow(AlabamaDeseg)
+# There are 126 AL districts with desegregation orders per Pro Publica
+
+AlabamaDeseg2 <- subset(open_deseg_pp, State == "AL")
+AlabamaDeseg2 <- nrow(AlabamaDeseg2)
+# There are 47 AL districts with desegregation orders per CRDC
+
+```
+
+10. How many desegregation orders were closed in Texas between 1957 and 2014
+```{r}
+# write the code here to answer question 10
+View(all_deseg_pp)
+TexasDesegLifted <- subset(all_deseg_pp, State == "TX")
+# 35 orders were closed in Texas.
+```
+
